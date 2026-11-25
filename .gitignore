@@ -181,3 +181,4 @@ cython_debug/
 .cursorindexingignore
 /new backup 1
 /old backup
+/composite

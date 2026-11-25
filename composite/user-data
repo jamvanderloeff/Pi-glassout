@@ -1,6 +1,5 @@
 #cloud-config
 manage_resolv_conf: false
-
 hostname: "cdu"
 manage_etc_hosts: true
 packages:
@@ -10,12 +9,11 @@ packages:
 - kmscube
 - libegl1
 - libgbm1
-- pip
+- python3-pip
 - python3-jedi
 - python3-opengl
 - python3-pygame
 - python3-websockets
-
 apt:
   preserve_sources_list: true
   conf: |

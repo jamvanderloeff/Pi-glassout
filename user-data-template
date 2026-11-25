@@ -1,0 +1,59 @@
+#cloud-config
+output:
+  all: '| tee -a /dev/console'
+manage_resolv_conf: false
+hostname: "cdu"
+manage_etc_hosts: true
+bootcmd:
+  - /usr/bin/date --set="$(date --reference=/boot/firmware/user-data  --iso-8601=hours)"
+packages:
+- avahi-daemon
+- fontconfig
+- git
+- kmscube
+- libegl1
+- libgbm1
+- python3-pip
+- python3-jedi
+- python3-opengl
+- python3-pygame
+- python3-websockets
+apt:
+  preserve_sources_list: true
+  conf: |
+    Acquire {
+      Check-Date "false";
+    };
+timezone: "invalid"
+keyboard:
+  model: pc105
+  layout: "us"
+user:
+  name: "cdu"
+  shell: /bin/bash
+  lock_passwd: false
+  passwd: "$y$jB5$OdZ9OF2B0VaOjp2He3ZRe/$z7swjg9WD7jcH9E./bfxNe5v/cYuRQl1vKu7iwauzS."
+  sudo: null
+ssh_pwauth: true
+write_files:
+  - path: /etc/systemd/system/getty@tty1.service.d/autologin.conf
+    permissions: '0644'
+    owner: root:root
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=-/sbin/agetty --autologin cdu --noclear %I $TERM
+  - path: /tmp/autologin.conf
+    permissions: '0644'
+    owner: root:root
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=-/sbin/agetty --autologin cdu --noclear %I $TERM
+runcmd:
+  - systemctl enable --now ssh
+  - sudo mkdir /etc/systemd/system/getty@tty1.service.d
+  - sudo mv /tmp/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf
+  - systemctl daemon-reload
+  - systemctl restart getty@tty1.service
+  - echo done! 
