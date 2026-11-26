@@ -81,7 +81,10 @@ async def main():
                             print(panelX, panelY, panelWidth, panelHeight)
                             crop = pygame.Rect(panelX, panelY, panelWidth, panelHeight)
                             cropped = pygame.transform.smoothscale(surface, (panelWidth, panelHeight))
+
                             screen.blit(cropped, (panelX, panelY))
+                            screen.blit(cropped, (panelX, panelY), special_flags=pygame.BLEND_RGB_ADD)
+
                             pygame.display.flip()
 
     except KeyboardInterrupt:
